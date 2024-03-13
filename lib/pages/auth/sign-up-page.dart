@@ -131,7 +131,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   name: "Email",
                   prefixIcon: Icon(
                     Icons.email_rounded,
-                    color: Colors.white,
+                    color: Colors.grey,
                   ),
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -155,7 +155,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   name: "Password",
                   prefixIcon: Icon(
                     Icons.lock_rounded,
-                    color: Colors.white,
+                    color: Colors.grey,
                   ),
                   obscureText: true,
                   validator: (value) {
@@ -196,7 +196,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       child: spinner
                           ? CircularProgressIndicator(color: Colors.white)
                           : Text(
-                              "Sign In",
+                              "Sign Up",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,

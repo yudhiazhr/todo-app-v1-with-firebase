@@ -50,7 +50,7 @@ class _MyAppState extends State<MyApp> {
         colorSchemeSeed: Color.fromARGB(255, 75, 150, 131),
       ),
       title: 'Todo app firebase',
-      home: AddTodoPage(),
+      home: currentPage,
     );
   }
 }

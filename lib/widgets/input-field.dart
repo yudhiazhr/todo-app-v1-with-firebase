@@ -19,33 +19,28 @@ class InputField extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 28),
       child: TextFormField(
-          style: TextStyle(color: Colors.white),
-          cursorColor: Color.fromARGB(255, 75, 150, 131),
-          controller: controller,
-          validator: validator,
-          onSaved: onSaved,
-          decoration: InputDecoration(
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-              borderSide: BorderSide(color: Color.fromARGB(255, 75, 150, 131)),
-            ),
-            fillColor: Colors.black,
-            filled: true,
-            prefixIcon: prefixIcon,
-            hintText: name,
-            hintStyle: TextStyle(
-              color: Colors.grey,
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-              borderSide: BorderSide(
-                color: Colors.white,
-                width: 2.0,
-              ),
-            ),
-            
+        style: TextStyle(color: Colors.white),
+        cursorColor: Color.fromARGB(255, 75, 150, 131),
+        controller: controller,
+        validator: validator,
+        onSaved: onSaved,
+        decoration: InputDecoration(
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: BorderSide(color: Color.fromARGB(255, 75, 150, 131)),
           ),
+          fillColor: Color(0xff2a2e3d),
+          filled: true,
+          prefixIcon: prefixIcon,
+          hintText: name,
+          hintStyle: TextStyle(
+            color: Colors.grey,
+          ),
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+              borderSide: BorderSide.none),
         ),
+      ),
     );
   }
 }

@@ -23,11 +23,11 @@ class ButtonAuth extends StatelessWidget {
         width: MediaQuery.of(context).size.width - 60,
         height: 60,
         child: Card(
-          color: Colors.black,
+          color: Color(0xff2a2e3d),
           elevation: 8,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
-              side: BorderSide(width: 1, color: Colors.grey)),
+              side: BorderSide.none),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

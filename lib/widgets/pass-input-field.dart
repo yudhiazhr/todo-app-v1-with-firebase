@@ -32,15 +32,12 @@ class PassInputField extends StatelessWidget {
               borderRadius: BorderRadius.circular(15),
               borderSide: BorderSide(color: Color.fromARGB(255, 75, 150, 131)),
             ),
-            fillColor: Colors.black,
+            fillColor: Color(0xff2a2e3d),
             filled: true,
             prefixIcon: prefixIcon,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15),
-              borderSide: BorderSide(
-                color: Colors.white, 
-                width: 2.0,
-              ),
+              borderSide: BorderSide.none
             ),
             hintText: name,
             hintStyle: TextStyle(

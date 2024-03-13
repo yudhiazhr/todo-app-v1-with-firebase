@@ -23,7 +23,9 @@ class _AddTodoPageState extends State<AddTodoPage> {
             color: Colors.white,
           ),
           onPressed: () {
-            Get.to(() => HomePage());
+            Get.to(() => HomePage(),
+                transition: Transition.leftToRight,
+                duration: Duration(milliseconds: 600));
           },
         ),
       ),
@@ -184,7 +186,6 @@ class _AddTodoPageState extends State<AddTodoPage> {
                   SizedBox(
                     width: 10,
                   ),
-
                 ],
               ),
             ],
@@ -194,8 +195,7 @@ class _AddTodoPageState extends State<AddTodoPage> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 8),
         child: InkWell(
-          onTap: () {
-          },
+          onTap: () {},
           child: Container(
             height: 50,
             width: MediaQuery.of(context).size.width - 60,

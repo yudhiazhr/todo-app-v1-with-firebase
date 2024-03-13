@@ -78,8 +78,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
     }
 
     return Scaffold(
-            backgroundColor: Color(0xff070F2B),
-
+      backgroundColor: Color(0xff070F2B),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -135,14 +134,15 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                       borderSide:
                           BorderSide(color: Color.fromARGB(255, 75, 150, 131)),
                     ),
-                    fillColor: Colors.grey.shade900,
+                    
+                    fillColor: Color(0xff2a2e3d),
                     filled: true,
                     prefixIcon: Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 14, horizontal: 15),
                       child: Text(
                         " (+62) ",
-                        style: TextStyle(color: Colors.white, fontSize: 17),
+                        style: TextStyle(color: Colors.grey, fontSize: 17),
                       ),
                     ),
                     suffixIcon: Padding(
@@ -181,10 +181,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide(
-                        color: Colors.grey.shade900,
-                        width: 2.0,
-                      ),
+                      borderSide: BorderSide.none
                     ),
                   ),
                 ),
