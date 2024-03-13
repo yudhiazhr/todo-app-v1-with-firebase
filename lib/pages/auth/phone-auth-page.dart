@@ -23,7 +23,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
   AuthClass authClass = AuthClass();
   String verificationIdFinal = "";
   String smsCode = "";
-  late Timer _timer;
+  Timer? _timer;
 
   @override
   Widget build(BuildContext context) {
@@ -73,12 +73,13 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
 
     @override
     void dispose() {
-      _timer.cancel();
+      _timer!.cancel();
       super.dispose();
     }
 
     return Scaffold(
-      backgroundColor: Colors.black,
+            backgroundColor: Color(0xff070F2B),
+
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -92,7 +93,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
         leading: IconButton(
             onPressed: () {
               setState(() {
-                _timer.cancel();
+                _timer?.cancel();
                 wait = false;
               });
               Get.off(() => LoginPage());

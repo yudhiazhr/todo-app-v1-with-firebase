@@ -50,22 +50,21 @@ class _SignUpPageState extends State<SignUpPage> {
       ScaffoldMessenger.of(context).showSnackBar(snackbar);
 
       setState(() {
-          spinner = true;
+        spinner = true;
       });
 
       Future.delayed(Duration(seconds: 2), () {
-      setState(() {
-        spinner = false;
+        setState(() {
+          spinner = false;
+        });
       });
-      
-    });
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Color(0xff070F2B),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
