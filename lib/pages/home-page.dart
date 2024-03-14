@@ -1,10 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:quickalert/quickalert.dart';
 import 'package:todo_app_firebase/pages/add-todo-page.dart';
+import 'package:todo_app_firebase/services/auth-services.dart';
 import 'dart:async';
 
 import 'package:todo_app_firebase/widgets/todo-card.dart';
+
+import 'auth/login-page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -14,8 +19,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  AuthClass authClass = AuthClass();
   late Stream<DateTime> _dateTimeStream;
   late DateTime _currentTime;
+  final Stream<QuerySnapshot> _stream = FirebaseFirestore.instance.collection("Todo").snapshots();
 
   @override
   void initState() {
@@ -80,33 +87,56 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              TodoCard(
-                  title: "Lets go GYM",
-                  iconData: Icons.sports_gymnastics_outlined,
-                  iconColor: Colors.white,
-                  iconBgColor: Colors.black,
-                  time: "11 PM",
-                  check: false),
-              TodoCard(
-                  title: "Wake up",
-                  iconData: Icons.alarm,
-                  iconColor: Colors.red,
-                  iconBgColor: Colors.white,
-                  time: "7 AM",
-                  check: true),
-              TodoCard(
-                  title: "Go to the shop",
-                  iconData: Icons.shopping_cart,
-                  iconColor: Colors.white,
-                  iconBgColor: Colors.orangeAccent,
-                  time: "19 PM",
-                  check: false),
-            ],
-          ),
-        ),
+        child: StreamBuilder(
+                stream: _stream, 
+                builder: (contex, snapshot) {
+                  if(!snapshot.hasData) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  return ListView.builder(
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      IconData iconData;
+                      Color iconColor;
+                      Color iconBgColor;
+                      Map<String, dynamic> documents = snapshot.data!.docs[index].data() as Map<String, dynamic>;
+                      switch (documents["category"]) {
+                        case "Work":
+                          iconData = Icons.work;
+                          iconColor = Colors.black;
+                          iconBgColor = Colors.white;
+                          break;
+                        case "WorkOut":
+                          iconData = Icons.sports_gymnastics_outlined;
+                          iconColor = Colors.white;
+                          iconBgColor = Colors.black;
+                          break;
+                        case "Food":
+                          iconData = Icons.local_grocery_store_rounded;
+                          iconColor = Colors.white;
+                          iconBgColor = Colors.orangeAccent;
+                          break;
+                        case "Design":
+                          iconData = Icons.design_services;
+                          iconColor = Colors.white;
+                          iconBgColor = Colors.teal;
+                          break;
+                        default:
+                          iconData = Icons.run_circle_outlined;
+                          iconColor = Colors.red;
+                          iconBgColor = Colors.white;
+                      }
+                      return TodoCard(
+                        title: documents["title"], 
+                        iconData: iconData, 
+                        iconColor: iconColor, 
+                        iconBgColor: iconBgColor, 
+                        time: "17 pm", 
+                        check: true);
+                    },
+                  );
+                }
+              )
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Color(0xff070F2B),
@@ -139,7 +169,29 @@ class _HomePageState extends State<HomePage> {
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings, size: 32, color: Colors.white),
+            icon: IconButton(
+              onPressed: () {
+                QuickAlert.show(
+                  context: context,
+                  type: QuickAlertType.warning,
+                  confirmBtnText: "Yes",
+                  cancelBtnText: "Cancel",
+                  showCancelBtn: true,
+                  showConfirmBtn: true,
+                  onCancelBtnTap: () => Get.back(),
+                  onConfirmBtnTap: () async {
+                    await authClass.signOut(context);
+                    Get.offAll(() => LoginPage());
+                  },
+                  confirmBtnColor: Colors.orangeAccent,
+                  title: "Logout",
+                  text: "Are you sure?\nDo you want to logout from the app?",
+                );
+              },
+              icon: Icon(
+                Icons.logout,
+                color: Colors.white,
+              )) ,
             label: '',
           ),
         ],

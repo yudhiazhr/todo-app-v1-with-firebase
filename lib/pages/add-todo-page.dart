@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quickalert/quickalert.dart';
 import 'package:todo_app_firebase/pages/home-page.dart';
 
 class AddTodoPage extends StatefulWidget {
@@ -10,6 +12,12 @@ class AddTodoPage extends StatefulWidget {
 }
 
 class _AddTodoPageState extends State<AddTodoPage> {
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController _titleController = TextEditingController();
+  TextEditingController _descriptionController = TextEditingController();
+  String type = "";
+  String category = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,170 +40,198 @@ class _AddTodoPageState extends State<AddTodoPage> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 8),
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Create\nNew Todo",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: "Poppins",
-                    fontSize: 26,
-                    fontWeight: FontWeight.w400),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Text("Task Title",
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Create\nNew Todo",
                   style: TextStyle(
                       color: Colors.white,
                       fontFamily: "Poppins",
-                      fontSize: 16)),
-              SizedBox(
-                height: 8,
-              ),
-              /* Search box */
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
+                      fontSize: 26,
+                      fontWeight: FontWeight.w400),
                 ),
-                child: Padding(
-                  padding: EdgeInsets.all(3),
-                  child: TextField(
-                    /* controller: searchController, */
-                    onSubmitted: (value) {
-                      /* _performSearch(); */
-                    },
-                    decoration: InputDecoration(
-                      hintText: 'Task title',
-                      hintStyle: TextStyle(
-                          fontFamily: "Poppins",
-                          fontSize: 14,
-                          color: Colors.grey),
-                      prefixIcon: IconButton(
-                          onPressed: () {
-                            /* Get.to(() => SearchAllScreen(
-                                              typedKeyWords:
-                                                  searchController.text)); */
-                          },
-                          icon: Icon(
-                            Icons.description,
-                            color: Colors.grey,
-                          )),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                            color: Color.fromARGB(255, 75, 150, 131)),
-                      ),
-                      border: OutlineInputBorder(
+                SizedBox(
+                  height: 20,
+                ),
+                Text("Task Title",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: "Poppins",
+                        fontSize: 16)),
+                SizedBox(
+                  height: 8,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(3),
+                    child: TextFormField(
+                      style: TextStyle(color: Colors.white),
+                      controller: _titleController,
+                      validator: (value) =>
+                          value == "" ? "Please fill your task title" : null,
+                      decoration: InputDecoration(
+                        hintText: 'Task title',
+                        hintStyle: TextStyle(
+                            fontFamily: "Poppins",
+                            fontSize: 14,
+                            color: Colors.grey),
+                        prefixIcon:Icon(
+                              Icons.description,
+                              color: Colors.grey,
+                            ),
+                        focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide.none),
-                      contentPadding: EdgeInsets.only(top: 10),
-                      filled: true,
-                      fillColor: Color(0xff2a2e3d),
+                          borderSide: BorderSide(
+                              color: Color.fromARGB(255, 75, 150, 131)),
+                        ),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide.none),
+                        contentPadding: EdgeInsets.only(top: 10),
+                        filled: true,
+                        fillColor: Color(0xff2a2e3d),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              /* Search box end */
-              SizedBox(
-                height: 20,
-              ),
-              Text(
-                "Task Type",
-                style: TextStyle(
-                    fontFamily: "Poppins", fontSize: 16, color: Colors.white),
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              Row(
-                children: [
-                  chipData("Important", 0xff2664fa),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  chipData("Planned", 0xff2bc8d9),
-                ],
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Text(
-                "Description",
-                style: TextStyle(
-                    fontFamily: "Poppins", color: Colors.white, fontSize: 16),
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              TextFormField(
-                /* controller: streetAddressEditingController, */
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Color(0xff2a2e3d),
-                  labelText: "Task description",
-                  labelStyle: TextStyle(
-                      fontFamily: "Poppins", color: Colors.grey, fontSize: 14),
-                  alignLabelWithHint: true,
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide:
-                        BorderSide(color: Color.fromARGB(255, 75, 150, 131)),
-                  ),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide.none),
+                SizedBox(
+                  height: 20,
                 ),
-                maxLines: null,
-                minLines: 5,
-                keyboardType: TextInputType.multiline,
-                validator: (value) =>
-                    value == "" ? "Please fill your task description" : null,
-                onSaved: (value) {
-                  /*  streetAddressEditingController.text = value!; */
-                },
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Text(
-                "Category",
-                style: TextStyle(
-                    fontFamily: "Poppins", color: Colors.white, fontSize: 16),
-              ),
-              Wrap(
-                children: [
-                  chipData("Food", 0xffFF407D),
-                  SizedBox(
-                    width: 10,
+                Text(
+                  "Task Type",
+                  style: TextStyle(
+                      fontFamily: "Poppins", fontSize: 16, color: Colors.white),
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                Row(
+                  children: [
+                    taskSelected("Important", 0xff2664fa),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    taskSelected("Planned", 0xff2bc8d9),
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  "Description",
+                  style: TextStyle(
+                      fontFamily: "Poppins", color: Colors.white, fontSize: 16),
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                TextFormField(
+                  style: TextStyle(color: Colors.white),
+                  controller: _descriptionController,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Color(0xff2a2e3d),
+                    labelText: "Task description",
+                    labelStyle: TextStyle(
+                        fontFamily: "Poppins",
+                        color: Colors.grey,
+                        fontSize: 14),
+                    alignLabelWithHint: true,
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide:
+                          BorderSide(color: Color.fromARGB(255, 75, 150, 131)),
+                    ),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide.none),
                   ),
-                  chipData("Workout", 0xff2bd9a1),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  chipData("Work", 0xff836FFF),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  chipData("Design", 0xff2bc8d9),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  chipData("Run", 0xffF57D1F),
-                  SizedBox(
-                    width: 10,
-                  ),
-                ],
-              ),
-            ],
+                  maxLines: null,
+                  minLines: 5,
+                  keyboardType: TextInputType.multiline,
+                  validator: (value) =>
+                      value == "" ? "Please fill your task description" : null,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  "Category",
+                  style: TextStyle(
+                      fontFamily: "Poppins", color: Colors.white, fontSize: 16),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Wrap(
+                  children: [
+                    categories("Food", 0xffFF407D),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    categories("Workout", 0xff2bd9a1),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    categories("Work", 0xff836FFF),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    categories("Design", 0xff2bc8d9),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    categories("Run", 0xffF57D1F),
+                    SizedBox(
+                      width: 10,
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 8),
         child: InkWell(
-          onTap: () {},
+          onTap: () async {
+            if (_formKey.currentState!.validate() &&
+                type.isNotEmpty &&
+                category.isNotEmpty) {
+              FirebaseFirestore.instance.collection("Todo").add({
+                "title": _titleController.text,
+                "task": type,
+                "category": category,
+                "description": _descriptionController.text
+              });
+              await QuickAlert.show(
+                context: context,
+                type: QuickAlertType.success,
+                text: 'Task success add to list',
+                confirmBtnColor: Color.fromARGB(255, 75, 150, 131),
+              );
+              Get.off(() => HomePage());
+            } else {
+              QuickAlert.show(
+                context: context,
+                type: QuickAlertType.warning,
+                confirmBtnText: "Yes",
+                showConfirmBtn: true,
+                onConfirmBtnTap: () => Get.back(),
+                confirmBtnColor: Colors.orangeAccent,
+                title: "Warning",
+                text:
+                    "Please select a task type & category before adding a todo.",
+              );
+            }
+          },
           child: Container(
             height: 50,
             width: MediaQuery.of(context).size.width - 60,
@@ -215,21 +251,63 @@ class _AddTodoPageState extends State<AddTodoPage> {
     );
   }
 
-  Widget chipData(String label, int color) {
-    return Chip(
-      backgroundColor: Color(color),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-        side: BorderSide(
-          color: Colors.transparent,
+  Widget taskSelected(String label, int color) {
+    return InkWell(
+      onTap: () {
+        setState(() {
+          if (type == label) {
+            type = "";
+          } else {
+            type = label;
+          }
+        });
+      },
+      child: Chip(
+        backgroundColor: Color(color),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: BorderSide(
+            width: 2.5,
+            color: type == label ? Colors.white54 : Colors.transparent,
+          ),
         ),
+        label: Text(
+          label,
+          style: TextStyle(
+              fontFamily: "Poppins", fontSize: 14, color: Colors.white),
+        ),
+        labelPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 1),
       ),
-      label: Text(
-        label,
-        style:
-            TextStyle(fontFamily: "Poppins", fontSize: 14, color: Colors.white),
+    );
+  }
+
+  Widget categories(String label, int color) {
+    return InkWell(
+      onTap: () {
+        setState(() {
+          if (category == label) {
+            category = "";
+          } else {
+            category = label;
+          }
+        });
+      },
+      child: Chip(
+        backgroundColor: Color(color),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: BorderSide(
+            width: 2.5,
+            color: category == label ? Colors.white54 : Colors.transparent,
+          ),
+        ),
+        label: Text(
+          label,
+          style: TextStyle(
+              fontFamily: "Poppins", fontSize: 14, color: Colors.white),
+        ),
+        labelPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 1),
       ),
-      labelPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 1),
     );
   }
 }
