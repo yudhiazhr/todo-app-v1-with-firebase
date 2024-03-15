@@ -7,6 +7,8 @@ class TodoCard extends StatelessWidget {
   final String time;
   final bool check;
   final Color iconBgColor;
+  final Function onChange;
+  final int index;
 
   const TodoCard(
       {Key? key,
@@ -15,7 +17,10 @@ class TodoCard extends StatelessWidget {
       required this.iconColor,
       required this.iconBgColor,
       required this.time,
-      required this.check})
+      required this.check,
+      required this.onChange,
+      required this. index
+      })
       : super(key: key);
 
   @override
@@ -31,7 +36,9 @@ class TodoCard extends StatelessWidget {
                 activeColor: Color.fromARGB(255, 75, 150, 131),
                 checkColor: Colors.white,
                 value: check,
-                onChanged: (bool? value) {},
+                onChanged: (bool? value) {
+                  onChange(index);
+                },
               ),
             ),
             data: ThemeData(

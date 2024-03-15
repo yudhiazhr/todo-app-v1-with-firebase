@@ -81,10 +81,10 @@ class _AddTodoPageState extends State<AddTodoPage> {
                             fontFamily: "Poppins",
                             fontSize: 14,
                             color: Colors.grey),
-                        prefixIcon:Icon(
-                              Icons.description,
-                              color: Colors.grey,
-                            ),
+                        prefixIcon: Icon(
+                          Icons.description,
+                          color: Colors.grey,
+                        ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
@@ -138,6 +138,7 @@ class _AddTodoPageState extends State<AddTodoPage> {
                     filled: true,
                     fillColor: Color(0xff2a2e3d),
                     labelText: "Task description",
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
                     labelStyle: TextStyle(
                         fontFamily: "Poppins",
                         color: Colors.grey,

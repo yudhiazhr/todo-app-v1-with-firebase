@@ -20,16 +20,15 @@ class _ViewDataState extends State<ViewData> {
   TextEditingController? _descriptionController;
   String? type;
   String? category;
-  bool edit = false;
 
   @override
   void initState() {
     super.initState();
     _titleController = TextEditingController(text: widget.document["title"]);
-    _descriptionController = TextEditingController(text: widget.document["description"]);
+    _descriptionController =
+        TextEditingController(text: widget.document["description"]);
     type = widget.document["task"];
     category = widget.document["category"];
-
   }
 
   @override
@@ -50,6 +49,43 @@ class _ViewDataState extends State<ViewData> {
                 duration: Duration(milliseconds: 600));
           },
         ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                QuickAlert.show(
+                    context: context,
+                    type: QuickAlertType.warning,
+                    text: 'Are you sure want to delete?',
+                    showConfirmBtn: true,
+                    showCancelBtn: true,
+                    confirmBtnText: "Yes",
+                    cancelBtnText: "Cancel",
+                    confirmBtnColor: Color.fromARGB(255, 75, 150, 131),
+                    onConfirmBtnTap: () {
+                      FirebaseFirestore.instance
+                          .collection("Todo")
+                          .doc(widget.id)
+                          .delete()
+                          .then(
+                            (value) => QuickAlert.show(
+                              context: context,
+                              type: QuickAlertType.success,
+                              text: 'Task succes been deleted',
+                              confirmBtnColor:
+                                  Color.fromARGB(255, 75, 150, 131),
+                            ),
+                          );
+                      Get.off(() => HomePage());
+                    },
+                    onCancelBtnTap: () {
+                      Get.back();
+                    });
+              },
+              icon: Icon(
+                Icons.delete,
+                color: Colors.red,
+              ))
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 8),
@@ -152,6 +188,7 @@ class _ViewDataState extends State<ViewData> {
                     filled: true,
                     fillColor: Color(0xff2a2e3d),
                     labelText: "Task description",
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
                     labelStyle: TextStyle(
                         fontFamily: "Poppins",
                         color: Colors.grey,
@@ -219,7 +256,10 @@ class _ViewDataState extends State<ViewData> {
             if (_formKey.currentState!.validate() &&
                 type!.isNotEmpty &&
                 category!.isNotEmpty) {
-              FirebaseFirestore.instance.collection("Todo").doc(widget.id).update({
+              FirebaseFirestore.instance
+                  .collection("Todo")
+                  .doc(widget.id)
+                  .update({
                 "title": _titleController!.text,
                 "task": type,
                 "category": category,
