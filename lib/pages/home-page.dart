@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:todo_app_firebase/pages/add-todo-page.dart';
+import 'package:todo_app_firebase/pages/view-data.dart';
 import 'package:todo_app_firebase/services/auth-services.dart';
 import 'dart:async';
 
@@ -126,13 +127,21 @@ class _HomePageState extends State<HomePage> {
                           iconColor = Colors.red;
                           iconBgColor = Colors.white;
                       }
-                      return TodoCard(
-                        title: documents["title"], 
-                        iconData: iconData, 
-                        iconColor: iconColor, 
-                        iconBgColor: iconBgColor, 
-                        time: "17 pm", 
-                        check: true);
+                      return InkWell(
+                        onTap: () {
+                          Get.to(() => ViewData(
+                            document: documents,
+                            id: snapshot.data!.docs[index].id,
+                            ));
+                        },
+                        child: TodoCard(
+                          title: documents["title"], 
+                          iconData: iconData, 
+                          iconColor: iconColor, 
+                          iconBgColor: iconBgColor, 
+                          time: "17 pm", 
+                          check: true),
+                      );
                     },
                   );
                 }
@@ -199,28 +208,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-
- /* IconButton(
-              onPressed: () {
-                QuickAlert.show(
-                  context: context,
-                  type: QuickAlertType.warning,
-                  confirmBtnText: "Yes",
-                  cancelBtnText: "Cancel",
-                  showCancelBtn: true,
-                  showConfirmBtn: true,
-                  onCancelBtnTap: () => Get.back(),
-                  onConfirmBtnTap: () async {
-                    await authClass.signOut(context);
-                    Get.offAll(() => LoginPage());
-                  },
-                  confirmBtnColor: Colors.orangeAccent,
-                  title: "Logout",
-                  text: "Are you sure?\nDo you want to logout from the app?",
-                );
-              },
-              icon: Icon(
-                Icons.logout,
-                color: Colors.white,
-              )) */
